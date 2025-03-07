@@ -35,12 +35,10 @@
             flex-direction: column;
         }
 
-        #pdfCanvas {
+        .pdf-container canvas {
             width: 100%;
-            height: auto;
-            filter: blur(10px);
-            transition: filter 0.5s ease-in-out;
             background-color: white;
+            margin-bottom: 10px;
         }
 
         .form-container {
@@ -93,9 +91,7 @@
 </head>
 <body>
 
-    <div class="pdf-container" id="pdfContainer">
-        <canvas id="pdfCanvas"></canvas>
-    </div>
+    <div class="pdf-container" id="pdfContainer"></div>
 
     <div class="form-container" id="formContainer">
         <h2>Register Here And Avail The <span style="color: red;">Best Offers!!</span></h2>
@@ -110,28 +106,31 @@
     <script>
         var url = 't1.pdf';
         
-        var loadingTask = pdfjsLib.getDocument(url);
-        loadingTask.promise.then(function(pdf) {
-            pdf.getPage(1).then(function(page) {
-                var scale = 1.5;
-                var viewport = page.getViewport({ scale: scale });
-                var canvas = document.getElementById('pdfCanvas');
-                var context = canvas.getContext('2d');
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-
-                var renderContext = {
-                    canvasContext: context,
-                    viewport: viewport
-                };
-                page.render(renderContext);
-            });
+        pdfjsLib.getDocument(url).promise.then(function(pdf) {
+            var pdfContainer = document.getElementById('pdfContainer');
+            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                pdf.getPage(pageNum).then(function(page) {
+                    var scale = 1.5;
+                    var viewport = page.getViewport({ scale: scale });
+                    var canvas = document.createElement('canvas');
+                    var context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    pdfContainer.appendChild(canvas);
+                    
+                    var renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    page.render(renderContext);
+                });
+            }
         });
 
         document.getElementById("callbackForm").addEventListener("submit", function (event) {
             event.preventDefault();
             document.getElementById("formContainer").style.display = "none";
-            document.getElementById("pdfCanvas").style.filter = "none";
+            document.getElementById("pdfContainer").style.filter = "none";
             
             // Send data to Google Apps Script using GET request
             const name = encodeURIComponent(document.getElementById("name").value);
@@ -155,6 +154,7 @@
 
 </body>
 </html>
+
 
 
 
