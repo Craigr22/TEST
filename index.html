@@ -58,18 +58,13 @@
     </div>
 
     <script>
-       document.getElementById("letterForm").addEventListener("submit", function(event) {
+      document.getElementById("letterForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
-    let formData = {
-        letter: document.getElementById("letterText").value
-    };
+    let letterText = document.getElementById("letterText").value;
+    let scriptURL = "YOUR_GOOGLE_SCRIPT_URL" + "?letter=" + encodeURIComponent(letterText); // 🔥 Append letter as a URL param
 
-    fetch("https://script.google.com/macros/s/AKfycbzvzQv4gTb-MAnSAqnFcg6qKCNYi0WN3eHo_cRFWEXvoTYIOOskoUavR-im5K0-kzvN/exec", {  // 🔥 Replace with your actual Google Apps Script URL
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
-    })
+    fetch(scriptURL)
     .then(response => response.json())
     .then(data => {
         // ✅ Hide form & show success message
