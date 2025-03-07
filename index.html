@@ -9,9 +9,9 @@
         /* ✅ Scrollable PDF Container */
         .pdf-container {
             position: fixed;
-            top: 100%;
+            top: 100%; /* ✅ Moves PDF further down */
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -100%);
             width: 70vw;  /* ✅ 70% Width */
             height: 100vh; /* ✅ 100% Height */
             background-color: rgba(0, 0, 0, 0.6);
@@ -20,7 +20,7 @@
             justify-content: flex-start;
             align-items: center;
             overflow-y: auto; /* ✅ Enables scrolling */
-            transition: background-color 0.5s ease-in-out;
+            transition: background-color 0.5s ease-in-out, top 0.5s ease-in-out;
             padding: 10px; /* ✅ Padding for better view */
         }
 
@@ -104,49 +104,42 @@
         document.addEventListener("DOMContentLoaded", function () {
             let pdfUrl = "t1.pdf"; // ✅ Your PDF
             let pdfContainer = document.getElementById("pdfContainer");
-            let pdfCanvas = document.getElementById("pdfViewer");
-            let pdfContext = pdfCanvas.getContext("2d");
+
+            function removeBlurFromAllPages() {
+                document.querySelectorAll(".pdf-container canvas").forEach(canvas => {
+                    canvas.style.filter = "none";
+                });
+
+                setTimeout(() => {
+                    pdfContainer.style.backgroundColor = "transparent";
+                }, 500);
+            }
 
             // ✅ Load PDF using PDF.js
             pdfjsLib.getDocument(pdfUrl).promise.then(function (pdf) {
-                pdf.getPage(1).then(function (page) {
-                    let viewport = page.getViewport({ scale: 1.0 }); // ✅ Smaller Scale
-                    pdfCanvas.width = viewport.width;
-                    pdfCanvas.height = viewport.height;
-
-                    let renderContext = {
-                        canvasContext: pdfContext,
-                        viewport: viewport,
-                    };
-
-                    page.render(renderContext);
-                });
-
-                // ✅ Enable scrolling through multiple pages
                 let pageNum = 1;
-                pdfContainer.addEventListener("scroll", function () {
-                    let scrollPosition = pdfContainer.scrollTop + pdfContainer.clientHeight;
-                    let bottom = pdfContainer.scrollHeight;
 
-                    if (scrollPosition >= bottom - 10 && pageNum < pdf.numPages) {
-                        pageNum++;
-                        pdf.getPage(pageNum).then(function (page) {
-                            let viewport = page.getViewport({ scale: 1.0 });
-                            let newCanvas = document.createElement("canvas");
-                            newCanvas.width = viewport.width;
-                            newCanvas.height = viewport.height;
-                            let newContext = newCanvas.getContext("2d");
+                function renderPage(pageNum) {
+                    pdf.getPage(pageNum).then(function (page) {
+                        let viewport = page.getViewport({ scale: 1.0 });
+                        let newCanvas = document.createElement("canvas");
+                        newCanvas.width = viewport.width;
+                        newCanvas.height = viewport.height;
+                        let newContext = newCanvas.getContext("2d");
 
-                            let renderContext = {
-                                canvasContext: newContext,
-                                viewport: viewport,
-                            };
+                        let renderContext = {
+                            canvasContext: newContext,
+                            viewport: viewport,
+                        };
 
-                            page.render(renderContext);
-                            pdfContainer.appendChild(newCanvas);
-                        });
-                    }
-                });
+                        page.render(renderContext);
+                        pdfContainer.appendChild(newCanvas);
+                    });
+                }
+
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    renderPage(i);
+                }
             });
 
             document.getElementById("requestForm").addEventListener("submit", function (event) {
@@ -166,15 +159,8 @@
                         if (data.includes("Success")) {
                             document.getElementById("formContainer").classList.add("hidden");
 
-                            // ✅ Remove Blur **Directly from Canvas**
-                            document.querySelectorAll(".pdf-container canvas").forEach(canvas => {
-                                canvas.style.filter = "none";
-                            });
-
-                            // ✅ Remove Dark Background
-                            setTimeout(() => {
-                                pdfContainer.style.backgroundColor = "transparent";
-                            }, 500);
+                            // ✅ Remove Blur from ALL Pages
+                            removeBlurFromAllPages();
                         } else {
                             throw new Error("Unexpected response: " + data);
                         }
@@ -189,6 +175,7 @@
 
 </body>
 </html>
+
 
 
 
