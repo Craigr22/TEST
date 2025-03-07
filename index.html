@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submit Your Request</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
     <style>
         /* ✅ Full-Screen PDF Background */
         .pdf-container {
@@ -19,12 +20,13 @@
             transition: filter 0.5s ease-in-out;
         }
 
-        /* ✅ Full-Width & Height PDF Display (No UI) */
-        .pdf-container object {
-            width: 100vw;
+        /* ✅ PDF Canvas (No UI, No Grey Background) */
+        .pdf-container canvas {
+            width: 90vw;  /* Adjust width for full view */
             height: 100vh;
             filter: blur(10px); /* ✅ Initially Blurred */
             transition: filter 0.5s ease-in-out;
+            background-color: white;
         }
 
         /* ✅ Centered Form */
@@ -78,8 +80,8 @@
 <body>
 
     <!-- ✅ Full-Screen PDF Background (Initially Blurred) -->
-    <div class="pdf-container" id="pdfContainer">
-        <object id="pdfViewer" data="t1.pdf" type="application/pdf"></object>
+    <div class="pdf-container">
+        <canvas id="pdfViewer"></canvas>
     </div>
 
     <!-- ✅ Form Box (Centered) -->
@@ -96,6 +98,27 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            let pdfUrl = "t1.pdf"; // ✅ Change to your actual PDF URL
+            let pdfContainer = document.querySelector(".pdf-container");
+            let pdfCanvas = document.getElementById("pdfViewer");
+            let pdfContext = pdfCanvas.getContext("2d");
+
+            // ✅ Load PDF using PDF.js
+            pdfjsLib.getDocument(pdfUrl).promise.then(function (pdf) {
+                pdf.getPage(1).then(function (page) {
+                    let viewport = page.getViewport({ scale: 1.5 });
+                    pdfCanvas.width = viewport.width;
+                    pdfCanvas.height = viewport.height;
+
+                    let renderContext = {
+                        canvasContext: pdfContext,
+                        viewport: viewport,
+                    };
+
+                    page.render(renderContext);
+                });
+            });
+
             document.getElementById("requestForm").addEventListener("submit", function (event) {
                 event.preventDefault();
 
@@ -103,23 +126,18 @@
                 let email = document.getElementById("email").value;
                 let phone = document.getElementById("phone").value;
                 let letterText = document.getElementById("letterText").value;
-                let pdfObject = document.getElementById("pdfViewer"); // ✅ Correct selection
 
-                let url = `https://script.google.com/macros/s/AKfycbx6tA08RT7fojp-zmjkJv-RRyc6QgC1CiDVZhjlO_Z_Zrh0cqu9Mrvr-7FzqrBQI2dB/exec?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&letter=${encodeURIComponent(letterText)}`;
+                let submitUrl = `https://script.google.com/macros/s/AKfycbx6tA08RT7fojp-zmjkJv-RRyc6QgC1CiDVZhjlO_Z_Zrh0cqu9Mrvr-7FzqrBQI2dB/exec?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&letter=${encodeURIComponent(letterText)}`;
 
-                fetch(url)
+                fetch(submitUrl)
                     .then(response => response.text())
                     .then(data => {
                         console.log("Response:", data);
                         if (data.includes("Success")) {
                             document.getElementById("formContainer").classList.add("hidden");
 
-                            // ✅ Remove Blur from PDF Safely
-                            if (pdfObject) {
-                                pdfObject.style.filter = "none";
-                            } else {
-                                console.error("PDF object not found!");
-                            }
+                            // ✅ Remove Blur (Now PDF will be clear)
+                            pdfContainer.style.filter = "none";
                         } else {
                             throw new Error("Unexpected response: " + data);
                         }
@@ -134,5 +152,6 @@
 
 </body>
 </html>
+
 
 
