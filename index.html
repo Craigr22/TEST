@@ -58,28 +58,30 @@
     </div>
 
     <script>
-        document.getElementById("letterForm").addEventListener("submit", function(event) {
-            event.preventDefault();
+       document.getElementById("letterForm").addEventListener("submit", function(event) {
+    event.preventDefault();
 
-            let formData = {
-                letter: document.getElementById("letterText").value
-            };
+    let formData = {
+        letter: document.getElementById("letterText").value
+    };
 
-            fetch("https://script.google.com/macros/s/AKfycbwaTeF3UsJKwGYnQN3ewXc8QPsGW1oXo_9wZYX6_N13hfoYr3RvVmcHIvtVoTazwy7K/exec", {  // 🔥 Replace with your actual Google Apps Script URL
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData)
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert("Letter submitted successfully!");
-                document.getElementById("letterText").value = ""; // Clear the textarea
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("Something went wrong. Please try again.");
-            });
-        });
+    fetch("YOUR_GOOGLE_SCRIPT_URL", {  // 🔥 Replace with your actual Google Apps Script URL
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        // ✅ Hide form & show success message
+        document.getElementById("formContainer").classList.add("hidden");
+        document.getElementById("successMessage").style.display = "block";
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Something went wrong. Please try again.");
+    });
+});
+
     </script>
 
 </body>
