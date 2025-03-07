@@ -96,39 +96,24 @@
     <p class="success-message" id="successMessage">🎉 Your letter has been submitted successfully!</p>
 
     <script>
-       document.getElementById("letterForm").addEventListener("submit", function(event) {
+      document.getElementById("letterForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
     let letterText = document.getElementById("letterText").value;
 
-    fetch(`https://script.google.com/macros/s/AKfycbzrJOEvgKsGufN4gYqpFDKn33Qz7nE2a2179YDZNRK-NR_4Ank_ZX4kho8TGYiZd22j/exec?letter=${encodeURIComponent(letterText)}`, { 
-        method: "GET",
-        mode: "cors",  // ✅ Allow cross-origin requests
-        cache: "no-cache",
-        headers: { 
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-    })
+    fetch(`YOUR_NEW_GOOGLE_SCRIPT_URL?letter=${encodeURIComponent(letterText)}`)
+    .then(response => response.text()) // 🔥 No JSON, just plain text response
     .then(data => {
-        if (data.status === "success") {
-            document.getElementById("formContainer").classList.add("hidden");
-            document.getElementById("successMessage").style.display = "block";
-        } else {
-            throw new Error("Unexpected response: " + JSON.stringify(data));
-        }
+        console.log("Response:", data); // ✅ Debugging
+        document.getElementById("formContainer").style.display = "none";
+        document.getElementById("successMessage").style.display = "block";
     })
     .catch(error => {
-        console.error("CORS Error:", error);
+        console.error("Error:", error);
         alert("Something went wrong: " + error.message);
     });
 });
+
 
 
     </script>
