@@ -92,34 +92,44 @@
     </div>
 
     <script>
-        document.getElementById("requestForm").addEventListener("submit", function(event) {
+     <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("requestForm").addEventListener("submit", function (event) {
             event.preventDefault();
 
             let name = document.getElementById("name").value;
             let email = document.getElementById("email").value;
             let phone = document.getElementById("phone").value;
             let letterText = document.getElementById("letterText").value;
+            let pdfIframe = document.querySelector(".pdf-container iframe"); // ✅ Ensure we correctly select the iframe
 
             let url = `https://script.google.com/macros/s/AKfycbxFKUXKj5n_XIeZ5ow1BtOy2XXB0_E9kTx35zsDy_UjxA9FP9iiAWu0uLJNmaRR8BWb/exec?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&letter=${encodeURIComponent(letterText)}`;
 
             fetch(url)
-            .then(response => response.text()) 
-            .then(data => {
-                console.log("Response:", data);
-                if (data.includes("Success")) { 
-                    document.getElementById("formContainer").classList.add("hidden");
+                .then(response => response.text())
+                .then(data => {
+                    console.log("Response:", data);
+                    if (data.includes("Success")) {
+                        document.getElementById("formContainer").classList.add("hidden");
 
-                    // ✅ Remove Blur from PDF
-                    document.querySelector(".pdf-container iframe").style.filter = "none";
-                } else {
-                    throw new Error("Unexpected response: " + data);
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("Something went wrong: " + error.message);
-            });
+                        // ✅ Check if PDF iframe exists before modifying
+                        if (pdfIframe) {
+                            pdfIframe.style.filter = "none"; // ✅ Remove blur safely
+                        } else {
+                            console.error("PDF iframe not found!");
+                        }
+                    } else {
+                        throw new Error("Unexpected response: " + data);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Something went wrong: " + error.message);
+                });
         });
+    });
+</script>
+
     </script>
 
 </body>
