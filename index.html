@@ -50,38 +50,23 @@
    <script>
 document.addEventListener("DOMContentLoaded", function() {
     document.querySelector(".form-box").addEventListener("submit", function(event) {
-        event.preventDefault();  // Prevents page reload
+        event.preventDefault();  
 
-        let formData = {
-            firstName: document.getElementById("ijowk").value,
-            lastName: document.getElementById("indfi").value,
-            email: document.getElementById("ipmgh").value,
-            phoneNumber: document.getElementById("imgis").value,
-            message: document.getElementById("i5vyy").value
-        };
+        let formData = new FormData();
+        formData.append("firstName", document.getElementById("ijowk").value);
+        formData.append("lastName", document.getElementById("indfi").value);
+        formData.append("email", document.getElementById("ipmgh").value);
+        formData.append("phoneNumber", document.getElementById("imgis").value);
+        formData.append("message", document.getElementById("i5vyy").value);
 
-        fetch("https://script.google.com/macros/s/AKfycby_QR96ryRV00jr-yLFzNU5AoUgd0vvu-2K26O4Rnwc8F96fmmKU7EWIKpKQsRw6O_C/exec", {
+        fetch("YOUR_NEW_GOOGLE_SCRIPT_URL_HERE", {
             method: "POST",
-            mode: "cors",
-            headers: { 
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(formData)
+            body: formData
         })
-        .then(response => response.text())
-        .then(text => {
-            try {
-                let data = JSON.parse(text);
-                if (data.result === "Success") {
-                    alert("Form Submitted Successfully!");
-                    document.querySelector(".form-box").reset();
-                } else {
-                    alert("Submission failed. Try again.");
-                }
-            } catch (error) {
-                console.error("Response parsing error:", error, text);
-                alert("Something went wrong. Please try again.");
-            }
+        .then(response => response.json())
+        .then(data => {
+            alert("Form Submitted Successfully!");
+            document.querySelector(".form-box").reset();
         })
         .catch(error => {
             console.error("Error:", error);
@@ -90,6 +75,5 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
-
 </body>
 </html>
