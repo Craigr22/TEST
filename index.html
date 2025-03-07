@@ -96,46 +96,31 @@
     <p class="success-message" id="successMessage">🎉 Your letter has been submitted successfully!</p>
 
     <script>
-        document.getElementById("letterForm").addEventListener("submit", function(event) {
-            event.preventDefault();
+       document.getElementById("letterForm").addEventListener("submit", function(event) {
+    event.preventDefault();
 
-            let letterText = document.getElementById("letterText").value;
-            let submitButton = document.getElementById("submitButton");
-            let formContainer = document.getElementById("formContainer");
+    let letterText = document.getElementById("letterText").value;
 
-            // ✅ Disable button to prevent multiple submissions
-            submitButton.disabled = true;
+    fetch(`YOUR_GOOGLE_SCRIPT_URL?letter=${encodeURIComponent(letterText)}`, { 
+        method: "GET",
+        mode: "cors",  // ✅ Fixes CORS issues
+        headers: { "Content-Type": "application/json" }
+    })
+    .then(response => response.json())  
+    .then(data => {
+        if (data.status === "success") {
+            document.getElementById("formContainer").classList.add("hidden");
+            document.getElementById("successMessage").style.display = "block";
+        } else {
+            throw new Error("Unexpected response: " + JSON.stringify(data));
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Something went wrong: " + error.message);
+    });
+});
 
-            // ✅ Apply blur effect
-            document.body.classList.add("blurred");
-
-            fetch(`https://script.google.com/macros/s/AKfycbwRuait5ExoQQtKHMd0pc_zW5wQGCVwFAbm2Zz4zUGIJgzc-_wNFU1TD_GrDaHvTCc/exec?letter=${encodeURIComponent(letterText)}`, { 
-                method: "GET",
-                headers: { "Content-Type": "application/json" }
-            })
-            .then(response => response.json())  
-            .then(data => {
-                if (data.status === "success") {
-                    // ✅ Smoothly hide form & show success message
-                    formContainer.classList.add("hidden");
-                    setTimeout(() => {
-                        formContainer.style.display = "none";
-                        document.getElementById("successMessage").style.display = "block";
-                    }, 500);
-
-                    // ✅ Remove blur effect
-                    document.body.classList.remove("blurred");
-                } else {
-                    throw new Error("Unexpected response: " + JSON.stringify(data));
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("Something went wrong: " + error.message);
-                submitButton.disabled = false; // ✅ Re-enable button if there's an error
-                document.body.classList.remove("blurred");
-            });
-        });
     </script>
 
 </body>
