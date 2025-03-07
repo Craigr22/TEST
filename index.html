@@ -59,19 +59,28 @@ document.addEventListener("DOMContentLoaded", function() {
         formData.append("phoneNumber", document.getElementById("imgis").value);
         formData.append("message", document.getElementById("i5vyy").value);
 
-        fetch("YOUR_NEW_GOOGLE_SCRIPT_URL_HERE", {
-            method: "POST",
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert("Form Submitted Successfully!");
-            document.querySelector(".form-box").reset();
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            alert("Something went wrong. Please try again.");
-        });
+      fetch("https://api.airtable.com/v0/YOUR_BASE_ID/YOUR_TABLE_NAME", {
+    method: "POST",
+    headers: {
+        "Authorization": "Bearer YOUR_PERSONAL_ACCESS_TOKEN",
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        records: [{
+            fields: {
+                "First Name": "John",
+                "Last Name": "Doe",
+                "Email": "johndoe@example.com",
+                "Phone Number": "1234567890",
+                "Message": "Hello from my website!"
+            }
+        }]
+    })
+})
+.then(response => response.json())
+.then(data => console.log("Success:", data))
+.catch(error => console.error("Error:", error));
+
     });
 });
 </script>
