@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="responsive.css">
+</head>
+<body>
+
+    <div class="contact_us_2">
+        <div class="responsive-container-block big-container">
+            <div class="blueBG"></div>
+            <div class="responsive-container-block container">
+                <form class="form-box" action="#" method="POST">
+                    <div class="container-block form-wrapper">
+                        <p class="text-blk contactus-head">Get in Touch</p>
+                        <p class="text-blk contactus-subhead">Nunc erat cursus tellus gravida.</p>
+                        <div class="responsive-container-block">
+                            <div class="responsive-cell-block wk-ipadp-6 wk-tab-12 wk-mobile-12 wk-desk-6">
+                                <p class="text-blk input-title">FIRST NAME</p>
+                                <input class="input" id="ijowk" name="FirstName" placeholder="Please enter first name..." required>
+                            </div>
+                            <div class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12">
+                                <p class="text-blk input-title">LAST NAME</p>
+                                <input class="input" id="indfi" name="LastName" placeholder="Please enter last name..." required>
+                            </div>
+                            <div class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12">
+                                <p class="text-blk input-title">EMAIL</p>
+                                <input class="input" id="ipmgh" name="Email" type="email" placeholder="Please enter email..." required>
+                            </div>
+                            <div class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12">
+                                <p class="text-blk input-title">PHONE NUMBER</p>
+                                <input class="input" id="imgis" name="PhoneNumber" type="tel" placeholder="Please enter phone number..." required>
+                            </div>
+                            <div class="responsive-cell-block wk-tab-12 wk-mobile-12 wk-desk-12 wk-ipadp-12">
+                                <p class="text-blk input-title">WHAT DO YOU HAVE IN MIND</p>
+                                <textarea class="textinput" id="i5vyy" name="Message" placeholder="Please enter query..." required></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="submit-btn">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ JavaScript for Form Submission -->
+   <script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelector(".form-box").addEventListener("submit", function(event) {
+        event.preventDefault();  // Prevents page reload
+
+        let formData = {
+            firstName: document.getElementById("ijowk").value,
+            lastName: document.getElementById("indfi").value,
+            email: document.getElementById("ipmgh").value,
+            phoneNumber: document.getElementById("imgis").value,
+            message: document.getElementById("i5vyy").value
+        };
+
+        fetch("https://script.google.com/macros/s/AKfycby_QR96ryRV00jr-yLFzNU5AoUgd0vvu-2K26O4Rnwc8F96fmmKU7EWIKpKQsRw6O_C/exec", {
+            method: "POST",
+            mode: "cors",
+            headers: { 
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.text())
+        .then(text => {
+            try {
+                let data = JSON.parse(text);
+                if (data.result === "Success") {
+                    alert("Form Submitted Successfully!");
+                    document.querySelector(".form-box").reset();
+                } else {
+                    alert("Submission failed. Try again.");
+                }
+            } catch (error) {
+                console.error("Response parsing error:", error, text);
+                alert("Something went wrong. Please try again.");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Something went wrong. Please try again.");
+        });
+    });
+});
+</script>
+
+</body>
+</html>
