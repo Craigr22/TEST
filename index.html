@@ -163,9 +163,12 @@
                         if (data.includes("Success")) {
                             document.getElementById("formContainer").classList.add("hidden");
 
-                            // ✅ Fix Blur Removal
+                            // ✅ Remove Blur **Directly from Canvas**
                             setTimeout(() => {
-                                pdfContainer.style.filter = "none";
+                                let canvases = document.querySelectorAll(".pdf-container canvas");
+                                canvases.forEach(canvas => {
+                                    canvas.style.filter = "none";
+                                });
                             }, 500);
                         } else {
                             throw new Error("Unexpected response: " + data);
@@ -181,6 +184,7 @@
 
 </body>
 </html>
+
 
 
 
