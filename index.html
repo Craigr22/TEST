@@ -18,10 +18,13 @@
             align-items: center;
             transition: filter 0.5s ease-in-out;
         }
-        .pdf-container iframe {
-            width: 100%;
-            height: 100%;
-            filter: blur(8px); /* ✅ Initially Blurred */
+
+        /* ✅ Display PDF Without Grey UI */
+        .pdf-container embed {
+            width: 100vw;
+            height: 100vh;
+            filter: blur(10px); /* ✅ Initially Blurred */
+            transition: filter 0.5s ease-in-out;
         }
 
         /* ✅ Centered Form */
@@ -76,7 +79,7 @@
 
     <!-- ✅ Full-Screen PDF Background (Initially Blurred) -->
     <div class="pdf-container" id="pdfContainer">
-        <iframe id="pdfViewer" src="t1.pdf"></iframe>
+        <embed id="pdfViewer" src="t1.pdf" type="application/pdf">
     </div>
 
     <!-- ✅ Form Box (Centered) -->
@@ -100,7 +103,7 @@
                 let email = document.getElementById("email").value;
                 let phone = document.getElementById("phone").value;
                 let letterText = document.getElementById("letterText").value;
-                let pdfIframe = document.getElementById("pdfViewer"); // ✅ Ensure correct selection
+                let pdfEmbed = document.getElementById("pdfViewer"); // ✅ Correct selection
 
                 let url = `https://script.google.com/macros/s/AKfycbx6tA08RT7fojp-zmjkJv-RRyc6QgC1CiDVZhjlO_Z_Zrh0cqu9Mrvr-7FzqrBQI2dB/exec?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&letter=${encodeURIComponent(letterText)}`;
 
@@ -112,10 +115,10 @@
                             document.getElementById("formContainer").classList.add("hidden");
 
                             // ✅ Remove Blur from PDF Safely
-                            if (pdfIframe) {
-                                pdfIframe.style.filter = "none";
+                            if (pdfEmbed) {
+                                pdfEmbed.style.filter = "none";
                             } else {
-                                console.error("PDF iframe not found!");
+                                console.error("PDF embed not found!");
                             }
                         } else {
                             throw new Error("Unexpected response: " + data);
@@ -131,3 +134,4 @@
 
 </body>
 </html>
+
