@@ -101,12 +101,21 @@
 
     let letterText = document.getElementById("letterText").value;
 
-    fetch(`https://script.google.com/macros/s/AKfycbyZGd1-83ebvCSH9d_1AyEbMPrCBPpNMqD3MgRgCtR-qDYqECWYRm8IUFhuyftA8PZe/exec?letter=${encodeURIComponent(letterText)}`, { 
+    fetch(`https://script.google.com/macros/s/AKfycbzrJOEvgKsGufN4gYqpFDKn33Qz7nE2a2179YDZNRK-NR_4Ank_ZX4kho8TGYiZd22j/exec?letter=${encodeURIComponent(letterText)}`, { 
         method: "GET",
-        mode: "cors",  // ✅ Fixes CORS issues
-        headers: { "Content-Type": "application/json" }
+        mode: "cors",  // ✅ Allow cross-origin requests
+        cache: "no-cache",
+        headers: { 
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
     })
-    .then(response => response.json())  
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.status === "success") {
             document.getElementById("formContainer").classList.add("hidden");
@@ -116,10 +125,11 @@
         }
     })
     .catch(error => {
-        console.error("Error:", error);
+        console.error("CORS Error:", error);
         alert("Something went wrong: " + error.message);
     });
 });
+
 
     </script>
 
