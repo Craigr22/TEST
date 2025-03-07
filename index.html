@@ -23,6 +23,7 @@
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
             width: 400px;
             text-align: center;
+            transition: opacity 0.5s ease-out; /* ✅ Smooth transition when hiding */
         }
 
         /* ✅ Textarea for letter */
@@ -48,10 +49,16 @@
             cursor: pointer;
             font-size: 16px;
             margin-top: 10px;
+            transition: background 0.3s ease;
         }
 
         .submit-btn:hover {
             background-color: #0056b3;
+        }
+
+        .submit-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
         }
 
         /* ✅ Hidden success message */
@@ -65,7 +72,13 @@
 
         /* ✅ Hide form after submission */
         .hidden {
-            display: none !important;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* ✅ Blur effect */
+        .blurred {
+            filter: blur(8px);
         }
     </style>
 </head>
@@ -75,7 +88,7 @@
         <h2>Submit a Letter</h2>
         <form id="letterForm">
             <textarea id="letterText" placeholder="Write your letter here..." required></textarea>
-            <button type="submit" class="submit-btn">Submit</button>
+            <button type="submit" class="submit-btn" id="submitButton">Submit</button>
         </form>
     </div>
 
@@ -87,6 +100,14 @@
             event.preventDefault();
 
             let letterText = document.getElementById("letterText").value;
+            let submitButton = document.getElementById("submitButton");
+            let formContainer = document.getElementById("formContainer");
+
+            // ✅ Disable button to prevent multiple submissions
+            submitButton.disabled = true;
+
+            // ✅ Apply blur effect
+            document.body.classList.add("blurred");
 
             fetch(`https://script.google.com/macros/s/AKfycbwRuait5ExoQQtKHMd0pc_zW5wQGCVwFAbm2Zz4zUGIJgzc-_wNFU1TD_GrDaHvTCc/exec?letter=${encodeURIComponent(letterText)}`, { 
                 method: "GET",
@@ -95,8 +116,15 @@
             .then(response => response.json())  
             .then(data => {
                 if (data.status === "success") {
-                    document.getElementById("formContainer").classList.add("hidden");
-                    document.getElementById("successMessage").style.display = "block";
+                    // ✅ Smoothly hide form & show success message
+                    formContainer.classList.add("hidden");
+                    setTimeout(() => {
+                        formContainer.style.display = "none";
+                        document.getElementById("successMessage").style.display = "block";
+                    }, 500);
+
+                    // ✅ Remove blur effect
+                    document.body.classList.remove("blurred");
                 } else {
                     throw new Error("Unexpected response: " + JSON.stringify(data));
                 }
@@ -104,11 +132,14 @@
             .catch(error => {
                 console.error("Error:", error);
                 alert("Something went wrong: " + error.message);
+                submitButton.disabled = false; // ✅ Re-enable button if there's an error
+                document.body.classList.remove("blurred");
             });
         });
     </script>
 
 </body>
 </html>
+
 
 
