@@ -63,7 +63,7 @@
 
     let letterText = document.getElementById("letterText").value;
 
-    fetch(`https://script.google.com/macros/s/AKfycbxHxmeI31v0OjH8NWQV9-divb7hQ5SDiMxin09NGG-QIYA_zjUROKgJnohA7h2h2tRw/exec?letter=${encodeURIComponent(letterText)}`, { // 🔥 Send data via GET query string
+    fetch(`https://script.google.com/macros/s/AKfycbyRrBWCPfw8k0pzdsHedov1QAzIbPgDZIdVHAlEXWg-c6WfA1mVNKfdK0TYScG2_Tjv/exec?letter=${encodeURIComponent(letterText)}`, { // 🔥 Send data via GET query string
         method: "GET",
         redirect: "follow",  // ✅ Fix 302 issues
         headers: { "Content-Type": "application/json" }
