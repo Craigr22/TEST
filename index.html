@@ -23,8 +23,8 @@
 
         /* ✅ PDF Canvas (No UI, No Grey Background) */
         .pdf-container canvas {
-            width: 90vw;  /* Adjust width for full view */
-            height: auto; /* Auto height to allow scrolling */
+            width: 90vw;
+            height: auto; /* Auto height for scrolling */
             filter: blur(10px); /* ✅ Initially Blurred */
             transition: filter 0.5s ease-in-out;
             background-color: white;
@@ -99,7 +99,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            let pdfUrl = "t1.pdf"; // ✅ Change to your actual PDF URL
+            let pdfUrl = "t1.pdf"; // ✅ Your PDF
             let pdfContainer = document.getElementById("pdfContainer");
             let pdfCanvas = document.getElementById("pdfViewer");
             let pdfContext = pdfCanvas.getContext("2d");
@@ -181,6 +181,7 @@
 
 </body>
 </html>
+
 
 
 
