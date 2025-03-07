@@ -62,7 +62,7 @@
     event.preventDefault();
 
     let letterText = document.getElementById("letterText").value;
-    let scriptURL = "YOUR_GOOGLE_SCRIPT_URL" + "?letter=" + encodeURIComponent(letterText); // 🔥 Append letter as a URL param
+    let scriptURL = "https://script.google.com/macros/s/AKfycbymsR0PJJ9584sEGIzUX2Frgi7_rvm5QcY2oOgt_E2ABbdbs1IczKqH0fRkppqxhjl9/exec" + "?letter=" + encodeURIComponent(letterText); // 🔥 Append letter as a URL param
 
     fetch(scriptURL)
     .then(response => response.json())
