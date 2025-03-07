@@ -19,7 +19,7 @@
             transition: background-color 0.5s ease-in-out;
             padding: 0;
             display: flex;
-            justify-content: flex-start; /* ✅ Ensures no extra spacing */
+            justify-content: flex-start;
             align-items: flex-start;
             flex-direction: column;
         }
@@ -31,7 +31,7 @@
             filter: blur(10px);
             transition: filter 0.5s ease-in-out;
             background-color: white;
-            margin: 0 !important; /* ✅ Forces no extra space */
+            margin: 0 !important;
             padding: 0 !important;
         }
 
@@ -146,6 +146,11 @@
                 for (let i = 1; i <= pdf.numPages; i++) {
                     renderPage(i);
                 }
+
+                // ✅ Move scroll to 5% down after PDF loads
+                setTimeout(() => {
+                    pdfContainer.scrollTop = pdfContainer.scrollHeight * 0.05;
+                }, 1000);
             });
 
             document.getElementById("requestForm").addEventListener("submit", function (event) {
@@ -181,4 +186,5 @@
 
 </body>
 </html>
+
 
