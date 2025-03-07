@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submit a Letter</title>
     <style>
-        /* ✅ Centering everything */
         body {
             display: flex;
             justify-content: center;
@@ -14,8 +13,6 @@
             font-family: Arial, sans-serif;
             background-color: #f3f3f3;
         }
-
-        /* ✅ Form container */
         .form-box {
             background-color: white;
             padding: 20px;
@@ -23,22 +20,16 @@
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
             width: 400px;
             text-align: center;
-            transition: opacity 0.5s ease-out; /* ✅ Smooth transition when hiding */
         }
-
-        /* ✅ Textarea for letter */
-        textarea {
+        input, textarea {
             width: 100%;
-            height: 150px;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
             font-size: 14px;
-            margin-top: 4px;
+            margin-top: 8px;
             resize: none;
         }
-
-        /* ✅ Submit button */
         .submit-btn {
             width: 100%;
             padding: 10px;
@@ -49,19 +40,10 @@
             cursor: pointer;
             font-size: 16px;
             margin-top: 10px;
-            transition: background 0.3s ease;
         }
-
         .submit-btn:hover {
             background-color: #0056b3;
         }
-
-        .submit-btn:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-
-        /* ✅ Hidden success message */
         .success-message {
             display: none;
             font-size: 16px;
@@ -69,16 +51,8 @@
             font-weight: bold;
             margin-top: 10px;
         }
-
-        /* ✅ Hide form after submission */
         .hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* ✅ Blur effect */
-        .blurred {
-            filter: blur(8px);
+            display: none !important;
         }
     </style>
 </head>
@@ -87,39 +61,40 @@
     <div class="form-box" id="formContainer">
         <h2>Submit a Letter</h2>
         <form id="letterForm">
+            <input type="text" id="firstName" placeholder="First Name" required>
+            <input type="text" id="lastName" placeholder="Last Name" required>
             <textarea id="letterText" placeholder="Write your letter here..." required></textarea>
-            <button type="submit" class="submit-btn" id="submitButton">Submit</button>
+            <button type="submit" class="submit-btn">Submit</button>
         </form>
     </div>
 
-    <!-- ✅ Success message -->
     <p class="success-message" id="successMessage">🎉 Your letter has been submitted successfully!</p>
 
     <script>
-      document.getElementById("letterForm").addEventListener("submit", function(event) {
-    event.preventDefault();
+        document.getElementById("letterForm").addEventListener("submit", function(event) {
+            event.preventDefault();
 
-    let letterText = document.getElementById("letterText").value;
+            let firstName = document.getElementById("firstName").value;
+            let lastName = document.getElementById("lastName").value;
+            let letterText = document.getElementById("letterText").value;
 
-    fetch(`https://script.google.com/macros/s/AKfycbxSfxFl6KJlTDr15sR5hRhZTwyk2oQi_HB-2J9_EFWtR-LClW4J6Nj9Ej2kqsWDE5VD/exec?letter=${encodeURIComponent(letterText)}`)
-    .then(response => response.text()) // 🔥 No JSON, just plain text response
-    .then(data => {
-        console.log("Response:", data); // ✅ Debugging
-        document.getElementById("formContainer").style.display = "none";
-        document.getElementById("successMessage").style.display = "block";
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        alert("Something went wrong: " + error.message);
-    });
-});
-
-
-
+            fetch(`YOUR_NEW_GOOGLE_SCRIPT_URL?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}&letter=${encodeURIComponent(letterText)}`)
+            .then(response => response.text()) 
+            .then(data => {
+                console.log("Response:", data);
+                document.getElementById("formContainer").classList.add("hidden");
+                document.getElementById("successMessage").style.display = "block";
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Something went wrong: " + error.message);
+            });
+        });
     </script>
 
 </body>
 </html>
+
 
 
 
