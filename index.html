@@ -6,25 +6,27 @@
     <title>Submit Your Request</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
     <style>
-        /* ✅ Centered PDF Background */
+        /* ✅ Scrollable PDF Container */
         .pdf-container {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 50vw;  /* ✅ Smaller PDF */
-            height: auto; /* Auto height */
+            height: 60vh; /* ✅ Maintain height */
             background-color: rgba(0, 0, 0, 0.6);
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            justify-content: flex-start;
             align-items: center;
             overflow-y: auto; /* ✅ Enables scrolling */
             transition: background-color 0.5s ease-in-out;
+            padding: 10px; /* ✅ Padding for better view */
         }
 
-        /* ✅ PDF Canvas (Smaller Size & No Grey Background) */
+        /* ✅ PDF Canvas (Smaller & Scrollable) */
         .pdf-container canvas {
-            width: 100%; /* ✅ Makes it smaller */
+            width: 100%;
             height: auto;
             filter: blur(10px); /* ✅ Initially Blurred */
             transition: filter 0.5s ease-in-out;
@@ -81,7 +83,7 @@
 </head>
 <body>
 
-    <!-- ✅ Smaller PDF Background (Initially Blurred) -->
+    <!-- ✅ Scrollable, Smaller PDF (Initially Blurred) -->
     <div class="pdf-container" id="pdfContainer">
         <canvas id="pdfViewer"></canvas>
     </div>
@@ -118,6 +120,32 @@
                     };
 
                     page.render(renderContext);
+                });
+
+                // ✅ Enable scrolling through multiple pages
+                let pageNum = 1;
+                pdfContainer.addEventListener("scroll", function () {
+                    let scrollPosition = pdfContainer.scrollTop + pdfContainer.clientHeight;
+                    let bottom = pdfContainer.scrollHeight;
+
+                    if (scrollPosition >= bottom - 10 && pageNum < pdf.numPages) {
+                        pageNum++;
+                        pdf.getPage(pageNum).then(function (page) {
+                            let viewport = page.getViewport({ scale: 1.0 });
+                            let newCanvas = document.createElement("canvas");
+                            newCanvas.width = viewport.width;
+                            newCanvas.height = viewport.height;
+                            let newContext = newCanvas.getContext("2d");
+
+                            let renderContext = {
+                                canvasContext: newContext,
+                                viewport: viewport,
+                            };
+
+                            page.render(renderContext);
+                            pdfContainer.appendChild(newCanvas);
+                        });
+                    }
                 });
             });
 
@@ -161,6 +189,7 @@
 
 </body>
 </html>
+
 
 
 
