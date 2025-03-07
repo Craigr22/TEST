@@ -35,14 +35,13 @@
             flex-direction: column;
         }
 
-        .pdf-container canvas {
+        .pdf-container iframe {
             width: 100%;
-            height: auto;
+            height: 100%;
             filter: blur(10px);
             transition: filter 0.5s ease-in-out;
             background-color: white;
-            margin: 0 !important;
-            padding: 0 !important;
+            border: none;
         }
 
         .form-container {
@@ -57,59 +56,6 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-        }
-
-        .left-section {
-            background-color: #f5ede4;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 40%;
-        }
-
-        .left-section h3 {
-            color: #8c6239;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .feature {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .feature img {
-            width: 30px;
-            margin-right: 10px;
-        }
-
-        .right-section {
-            padding: 20px;
-            width: 60%;
-            position: relative;
-        }
-
-        .right-section h2 {
-            text-align: center;
-            color: #333;
-            font-weight: 700;
-        }
-
-        .right-section input, .right-section select {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .phone-container {
-            display: flex;
-            gap: 10px;
         }
 
         .submit-btn {
@@ -132,38 +78,16 @@
 <body>
 
     <div class="pdf-container" id="pdfContainer">
-        <canvas id="pdfViewer"></canvas>
+        <iframe id="pdfViewer" src="t1.pdf"></iframe>
     </div>
 
     <div class="form-container" id="formContainer">
-        <div class="left-section">
-            <h3>We Promise</h3>
-            <div class="feature">
-                <img src="https://img.icons8.com/ios-filled/50/8c6239/phone.png" alt="Call">
-                <span>Instant Call Back</span>
-            </div>
-            <div class="feature">
-                <img src="https://img.icons8.com/ios-filled/50/8c6239/car.png" alt="Visit">
-                <span>Free Site Visit</span>
-            </div>
-            <div class="feature">
-                <img src="https://img.icons8.com/ios-filled/50/8c6239/money.png" alt="Price">
-                <span>Unmatched Price</span>
-            </div>
-        </div>
         <div class="right-section">
             <h2>Register Here And Avail The <span style="color: red;">Best Offers!!</span></h2>
             <form id="callbackForm">
                 <input type="text" id="name" placeholder="Name" required>
                 <input type="email" id="email" placeholder="Email Address" required>
-                <div class="phone-container">
-                    <select id="country-code">
-                        <option value="+91">India (+91)</option>
-                        <option value="+1">USA (+1)</option>
-                        <option value="+44">UK (+44)</option>
-                    </select>
-                    <input type="tel" id="phone" placeholder="Phone number" required>
-                </div>
+                <input type="tel" id="phone" placeholder="Phone number" required>
                 <button type="submit" class="submit-btn">Get Instant Call Back</button>
             </form>
         </div>
@@ -174,6 +98,22 @@
             event.preventDefault();
             document.getElementById("formContainer").style.display = "none";
             document.getElementById("pdfViewer").style.filter = "none";
+            
+            // Send data to Google Apps Script using GET request
+            const name = encodeURIComponent(document.getElementById("name").value);
+            const email = encodeURIComponent(document.getElementById("email").value);
+            const phone = encodeURIComponent(document.getElementById("phone").value);
+            
+            const scriptURL = `https://script.google.com/macros/s/AKfycbx6tA08RT7fojp-zmjkJv-RRyc6QgC1CiDVZhjlO_Z_Zrh0cqu9Mrvr-7FzqrBQI2dB/exec?name=${name}&email=${email}&phone=${phone}`;
+            
+            fetch(scriptURL, {
+                method: "GET"
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Data saved to Google Sheet", data);
+            })
+            .catch(error => console.error("Error:", error));
         });
     </script>
 
