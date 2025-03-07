@@ -6,22 +6,22 @@
     <title>Submit Your Request</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
     <style>
-        /* ✅ Fixed Positioning to Remove White Space */
+        /* ✅ PDF Container */
         .pdf-container {
-            position: fixed;
-            bottom: 0;  /* ✅ Fixes white space issue */
+            position: absolute;
+            top: 0; /* ✅ Shows PDF from top of the page */
             left: 50%;
             transform: translateX(-50%);
             width: 70vw;  /* ✅ 70% Width */
-            height: 100vh; /* ✅ 100% Height */
+            height: 100vh; /* ✅ Full height */
             background-color: rgba(0, 0, 0, 0.6);
             display: flex;
             flex-direction: column;
-            justify-content: flex-start; /* ✅ Removes unwanted top space */
+            justify-content: flex-start;
             align-items: center;
             overflow-y: auto; /* ✅ Enables scrolling */
             transition: background-color 0.5s ease-in-out;
-            padding: 0; /* ✅ Remove extra padding */
+            padding: 0;
         }
 
         /* ✅ PDF Canvas (70% Width & Full Height) */
@@ -83,7 +83,7 @@
 </head>
 <body>
 
-    <!-- ✅ Scrollable, 70% Width & 100% Height PDF (Initially Blurred) -->
+    <!-- ✅ PDF from Top to Bottom (Initially Blurred) -->
     <div class="pdf-container" id="pdfContainer">
         <canvas id="pdfViewer"></canvas>
     </div>
@@ -175,6 +175,7 @@
 
 </body>
 </html>
+
 
 
 
