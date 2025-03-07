@@ -65,7 +65,7 @@
         letter: document.getElementById("letterText").value
     };
 
-    fetch("YOUR_GOOGLE_SCRIPT_URL", {  // 🔥 Replace with your actual Google Apps Script URL
+    fetch("https://script.google.com/macros/s/AKfycbzvzQv4gTb-MAnSAqnFcg6qKCNYi0WN3eHo_cRFWEXvoTYIOOskoUavR-im5K0-kzvN/exec", {  // 🔥 Replace with your actual Google Apps Script URL
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
