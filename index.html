@@ -37,7 +37,7 @@
 
         #pdfCanvas {
             width: 100%;
-            height: 100%;
+            height: auto;
             filter: blur(10px);
             transition: filter 0.5s ease-in-out;
             background-color: white;
@@ -45,16 +45,33 @@
 
         .form-container {
             display: flex;
+            flex-direction: column;
             background: white;
             width: 600px;
+            padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
             position: absolute;
             z-index: 10;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+        }
+
+        .form-container h2 {
+            text-align: center;
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .form-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
         }
 
         .submit-btn {
@@ -81,15 +98,13 @@
     </div>
 
     <div class="form-container" id="formContainer">
-        <div class="right-section">
-            <h2>Register Here And Avail The <span style="color: red;">Best Offers!!</span></h2>
-            <form id="callbackForm">
-                <input type="text" id="name" placeholder="Name" required>
-                <input type="email" id="email" placeholder="Email Address" required>
-                <input type="tel" id="phone" placeholder="Phone number" required>
-                <button type="submit" class="submit-btn">Get Instant Call Back</button>
-            </form>
-        </div>
+        <h2>Register Here And Avail The <span style="color: red;">Best Offers!!</span></h2>
+        <form id="callbackForm">
+            <input type="text" id="name" placeholder="Name" required>
+            <input type="email" id="email" placeholder="Email Address" required>
+            <input type="tel" id="phone" placeholder="Phone number" required>
+            <button type="submit" class="submit-btn">Get Instant Call Back</button>
+        </form>
     </div>
 
     <script>
@@ -131,6 +146,8 @@
             .then(response => response.json())
             .then(data => {
                 console.log("Data saved to Google Sheet", data);
+                // Auto-scroll 2% down after submission
+                window.scrollBy({ top: window.innerHeight * 0.02, behavior: 'smooth' });
             })
             .catch(error => console.error("Error:", error));
         });
@@ -138,6 +155,7 @@
 
 </body>
 </html>
+
 
 
 
