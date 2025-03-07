@@ -18,12 +18,13 @@
             justify-content: center;
             align-items: center;
             transition: filter 0.5s ease-in-out;
+            overflow-y: auto; /* ✅ Enables scrolling */
         }
 
         /* ✅ PDF Canvas (No UI, No Grey Background) */
         .pdf-container canvas {
             width: 90vw;  /* Adjust width for full view */
-            height: 100vh;
+            height: auto; /* Auto height to allow scrolling */
             filter: blur(10px); /* ✅ Initially Blurred */
             transition: filter 0.5s ease-in-out;
             background-color: white;
@@ -80,7 +81,7 @@
 <body>
 
     <!-- ✅ Full-Screen PDF Background (Initially Blurred) -->
-    <div class="pdf-container">
+    <div class="pdf-container" id="pdfContainer">
         <canvas id="pdfViewer"></canvas>
     </div>
 
@@ -99,7 +100,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             let pdfUrl = "t1.pdf"; // ✅ Change to your actual PDF URL
-            let pdfContainer = document.querySelector(".pdf-container");
+            let pdfContainer = document.getElementById("pdfContainer");
             let pdfCanvas = document.getElementById("pdfViewer");
             let pdfContext = pdfCanvas.getContext("2d");
 
@@ -116,6 +117,32 @@
                     };
 
                     page.render(renderContext);
+                });
+
+                // ✅ Enable scrolling through PDF pages
+                let pageNum = 1;
+                pdfContainer.addEventListener("scroll", function () {
+                    let scrollPosition = pdfContainer.scrollTop + pdfContainer.clientHeight;
+                    let bottom = pdfContainer.scrollHeight;
+
+                    if (scrollPosition >= bottom - 10 && pageNum < pdf.numPages) {
+                        pageNum++;
+                        pdf.getPage(pageNum).then(function (page) {
+                            let viewport = page.getViewport({ scale: 1.5 });
+                            let newCanvas = document.createElement("canvas");
+                            newCanvas.width = viewport.width;
+                            newCanvas.height = viewport.height;
+                            let newContext = newCanvas.getContext("2d");
+
+                            let renderContext = {
+                                canvasContext: newContext,
+                                viewport: viewport,
+                            };
+
+                            page.render(renderContext);
+                            pdfContainer.appendChild(newCanvas);
+                        });
+                    }
                 });
             });
 
@@ -136,8 +163,10 @@
                         if (data.includes("Success")) {
                             document.getElementById("formContainer").classList.add("hidden");
 
-                            // ✅ Remove Blur (Now PDF will be clear)
-                            pdfContainer.style.filter = "none";
+                            // ✅ Fix Blur Removal
+                            setTimeout(() => {
+                                pdfContainer.style.filter = "none";
+                            }, 500);
                         } else {
                             throw new Error("Unexpected response: " + data);
                         }
@@ -152,6 +181,7 @@
 
 </body>
 </html>
+
 
 
 
