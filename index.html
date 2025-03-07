@@ -3,79 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Form</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="responsive.css">
+    <title>Submit a Letter</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+        }
+        .form-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-top: 4px;
+            resize: none;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
 
-    <div class="contact_us_2">
-        <div class="responsive-container-block big-container">
-            <div class="blueBG"></div>
-            <div class="responsive-container-block container">
-                <form class="form-box" action="#" method="POST">
-                    <div class="container-block form-wrapper">
-                        <p class="text-blk contactus-head">Get in Touch</p>
-                        <p class="text-blk contactus-subhead">Nunc erat cursus tellus gravida.</p>
-                        <div class="responsive-container-block">
-                            <div class="responsive-cell-block wk-ipadp-6 wk-tab-12 wk-mobile-12 wk-desk-6">
-                                <p class="text-blk input-title">FIRST NAME</p>
-                                <input class="input" id="ijowk" name="FirstName" placeholder="Please enter first name..." required>
-                            </div>
-                            <div class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12">
-                                <p class="text-blk input-title">LAST NAME</p>
-                                <input class="input" id="indfi" name="LastName" placeholder="Please enter last name..." required>
-                            </div>
-                            <div class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12">
-                                <p class="text-blk input-title">EMAIL</p>
-                                <input class="input" id="ipmgh" name="Email" type="email" placeholder="Please enter email..." required>
-                            </div>
-                            <div class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12">
-                                <p class="text-blk input-title">PHONE NUMBER</p>
-                                <input class="input" id="imgis" name="PhoneNumber" type="tel" placeholder="Please enter phone number..." required>
-                            </div>
-                            <div class="responsive-cell-block wk-tab-12 wk-mobile-12 wk-desk-12 wk-ipadp-12">
-                                <p class="text-blk input-title">WHAT DO YOU HAVE IN MIND</p>
-                                <textarea class="textinput" id="i5vyy" name="Message" placeholder="Please enter query..." required></textarea>
-                            </div>
-                        </div>
-                        <button type="submit" class="submit-btn">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+    <div class="form-box">
+        <h2>Submit a Letter</h2>
+        <form id="letterForm">
+            <textarea id="letterText" placeholder="Write your letter here..." required></textarea>
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
     </div>
 
-    <!-- ✅ JavaScript for Form Submission -->
-  <script>
-document.addEventListener("DOMContentLoaded", function() {
-    document.querySelector(".form-box").addEventListener("submit", function(event) {
-        event.preventDefault();  
+    <script>
+        document.getElementById("letterForm").addEventListener("submit", function(event) {
+            event.preventDefault();
 
-        let formData = {
-            firstName: document.getElementById("ijowk").value,
-            lastName: document.getElementById("indfi").value,
-            email: document.getElementById("ipmgh").value,
-            phoneNumber: document.getElementById("imgis").value,
-            message: document.getElementById("i5vyy").value
-        };
+            let formData = {
+                letter: document.getElementById("letterText").value
+            };
 
-        fetch("https://script.google.com/macros/s/AKfycbwWujkjF34o4RhGNZZNXhGnZJjeLDKYd6ACRBF_h10sC_pm8KwhcSTO2YEGDAQJ6FvT/exec", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert("Form Submitted Successfully!");
-            document.querySelector(".form-box").reset();
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            alert("Something went wrong. Please try again.");
+            fetch("https://script.google.com/macros/s/AKfycbwaTeF3UsJKwGYnQN3ewXc8QPsGW1oXo_9wZYX6_N13hfoYr3RvVmcHIvtVoTazwy7K/exec", {  // 🔥 Replace with your actual Google Apps Script URL
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("Letter submitted successfully!");
+                document.getElementById("letterText").value = ""; // Clear the textarea
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Something went wrong. Please try again.");
+            });
         });
-    });
-});
-</script>
+    </script>
+
 </body>
 </html>
+
