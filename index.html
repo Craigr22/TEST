@@ -6,7 +6,7 @@
     <title>Submit Your Request</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
     <style>
-        /* ✅ Ensure the PDF container takes up the entire viewport */
+        /* ✅ Ensure PDF starts from the top */
         .pdf-container {
             position: absolute;
             top: 0;
@@ -19,18 +19,20 @@
             transition: background-color 0.5s ease-in-out;
             padding: 0;
             display: flex;
-            justify-content: flex-start;
-            align-items: center;
+            justify-content: flex-start; /* ✅ Ensures no extra spacing */
+            align-items: flex-start;
             flex-direction: column;
         }
 
-        /* ✅ Adjust canvas to remove blur and extra spacing */
+        /* ✅ Remove any margins added to canvas */
         .pdf-container canvas {
             width: 100%;
             height: auto;
             filter: blur(10px);
             transition: filter 0.5s ease-in-out;
             background-color: white;
+            margin: 0 !important; /* ✅ Forces no extra space */
+            padding: 0 !important;
         }
 
         /* ✅ Centered Form */
@@ -125,9 +127,11 @@
                     pdf.getPage(pageNum).then(function (page) {
                         let viewport = page.getViewport({ scale: 1.0 });
                         let newCanvas = document.createElement("canvas");
+                        let newContext = newCanvas.getContext("2d");
+
+                        // ✅ Ensure proper sizing
                         newCanvas.width = viewport.width;
                         newCanvas.height = viewport.height;
-                        let newContext = newCanvas.getContext("2d");
 
                         let renderContext = {
                             canvasContext: newContext,
@@ -177,3 +181,4 @@
 
 </body>
 </html>
+
