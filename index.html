@@ -58,7 +58,7 @@
     </div>
 
     <script>
-   document.getElementById("letterForm").addEventListener("submit", function(event) {
+  document.getElementById("letterForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
     let formData = {
@@ -67,22 +67,25 @@
 
     fetch("https://script.google.com/macros/s/AKfycbxHxmeI31v0OjH8NWQV9-divb7hQ5SDiMxin09NGG-QIYA_zjUROKgJnohA7h2h2tRw/exec", {  // 🔥 Replace with actual Web App URL
         method: "POST",
-        redirect: "follow",  // ✅ Fixes 302 issues
+        redirect: "follow",  // ✅ Fix 302 issues
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
     })
-    .then(response => response.json())
+    .then(response => response.json())  // ✅ Ensure response is parsed
     .then(data => {
-        // ✅ Hide form & show success message
-        document.getElementById("formContainer").classList.add("hidden");
-        document.getElementById("successMessage").style.display = "block";
+        if (data.status === "success") {
+            // ✅ Hide form & show success message
+            document.getElementById("formContainer").classList.add("hidden");
+            document.getElementById("successMessage").style.display = "block";
+        } else {
+            throw new Error("Unexpected response: " + JSON.stringify(data));
+        }
     })
     .catch(error => {
         console.error("Error:", error);
-        alert("Something went wrong. Please try again.");
+        alert("Something went wrong: " + error.message);
     });
 });
-
 
     </script>
 
