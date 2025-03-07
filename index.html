@@ -15,10 +15,11 @@
             height: 100vh;
             background-color: rgba(0, 0, 0, 0.6);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: filter 0.5s ease-in-out;
             overflow-y: auto; /* ✅ Enables scrolling */
+            transition: background-color 0.5s ease-in-out;
         }
 
         /* ✅ PDF Canvas (No UI, No Grey Background) */
@@ -163,12 +164,14 @@
                         if (data.includes("Success")) {
                             document.getElementById("formContainer").classList.add("hidden");
 
-                            // ✅ Remove Blur **Directly from Canvas**
+                            // ✅ 1: Remove Blur **Directly from Canvas**
+                            document.querySelectorAll(".pdf-container canvas").forEach(canvas => {
+                                canvas.style.filter = "none";
+                            });
+
+                            // ✅ 2: Remove Dark Background
                             setTimeout(() => {
-                                let canvases = document.querySelectorAll(".pdf-container canvas");
-                                canvases.forEach(canvas => {
-                                    canvas.style.filter = "none";
-                                });
+                                pdfContainer.style.backgroundColor = "transparent";
                             }, 500);
                         } else {
                             throw new Error("Unexpected response: " + data);
@@ -184,6 +187,7 @@
 
 </body>
 </html>
+
 
 
 
