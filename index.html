@@ -61,17 +61,14 @@
   document.getElementById("letterForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
-    let formData = {
-        letter: document.getElementById("letterText").value
-    };
+    let letterText = document.getElementById("letterText").value;
 
-    fetch("https://script.google.com/macros/s/AKfycbxHxmeI31v0OjH8NWQV9-divb7hQ5SDiMxin09NGG-QIYA_zjUROKgJnohA7h2h2tRw/exec", {  // 🔥 Replace with actual Web App URL
-        method: "POST",
+    fetch(`YOUR_GOOGLE_SCRIPT_URL?letter=${encodeURIComponent(letterText)}`, { // 🔥 Send data via GET query string
+        method: "GET",
         redirect: "follow",  // ✅ Fix 302 issues
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
+        headers: { "Content-Type": "application/json" }
     })
-    .then(response => response.json())  // ✅ Ensure response is parsed
+    .then(response => response.json())  // ✅ Ensure JSON response
     .then(data => {
         if (data.status === "success") {
             // ✅ Hide form & show success message
@@ -86,6 +83,7 @@
         alert("Something went wrong: " + error.message);
     });
 });
+
 
     </script>
 
