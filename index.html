@@ -6,26 +6,26 @@
     <title>Submit Your Request</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
     <style>
-        /* ✅ Full-Screen PDF Background */
+        /* ✅ Centered PDF Background */
         .pdf-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50vw;  /* ✅ Smaller PDF */
+            height: auto; /* Auto height */
             background-color: rgba(0, 0, 0, 0.6);
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             overflow-y: auto; /* ✅ Enables scrolling */
             transition: background-color 0.5s ease-in-out;
         }
 
-        /* ✅ PDF Canvas (No UI, No Grey Background) */
+        /* ✅ PDF Canvas (Smaller Size & No Grey Background) */
         .pdf-container canvas {
-            width: 90vw;
-            height: auto; /* Auto height for scrolling */
+            width: 100%; /* ✅ Makes it smaller */
+            height: auto;
             filter: blur(10px); /* ✅ Initially Blurred */
             transition: filter 0.5s ease-in-out;
             background-color: white;
@@ -81,7 +81,7 @@
 </head>
 <body>
 
-    <!-- ✅ Full-Screen PDF Background (Initially Blurred) -->
+    <!-- ✅ Smaller PDF Background (Initially Blurred) -->
     <div class="pdf-container" id="pdfContainer">
         <canvas id="pdfViewer"></canvas>
     </div>
@@ -108,7 +108,7 @@
             // ✅ Load PDF using PDF.js
             pdfjsLib.getDocument(pdfUrl).promise.then(function (pdf) {
                 pdf.getPage(1).then(function (page) {
-                    let viewport = page.getViewport({ scale: 1.5 });
+                    let viewport = page.getViewport({ scale: 1.0 }); // ✅ Smaller Scale
                     pdfCanvas.width = viewport.width;
                     pdfCanvas.height = viewport.height;
 
@@ -118,32 +118,6 @@
                     };
 
                     page.render(renderContext);
-                });
-
-                // ✅ Enable scrolling through PDF pages
-                let pageNum = 1;
-                pdfContainer.addEventListener("scroll", function () {
-                    let scrollPosition = pdfContainer.scrollTop + pdfContainer.clientHeight;
-                    let bottom = pdfContainer.scrollHeight;
-
-                    if (scrollPosition >= bottom - 10 && pageNum < pdf.numPages) {
-                        pageNum++;
-                        pdf.getPage(pageNum).then(function (page) {
-                            let viewport = page.getViewport({ scale: 1.5 });
-                            let newCanvas = document.createElement("canvas");
-                            newCanvas.width = viewport.width;
-                            newCanvas.height = viewport.height;
-                            let newContext = newCanvas.getContext("2d");
-
-                            let renderContext = {
-                                canvasContext: newContext,
-                                viewport: viewport,
-                            };
-
-                            page.render(renderContext);
-                            pdfContainer.appendChild(newCanvas);
-                        });
-                    }
                 });
             });
 
@@ -164,12 +138,12 @@
                         if (data.includes("Success")) {
                             document.getElementById("formContainer").classList.add("hidden");
 
-                            // ✅ 1: Remove Blur **Directly from Canvas**
+                            // ✅ Remove Blur **Directly from Canvas**
                             document.querySelectorAll(".pdf-container canvas").forEach(canvas => {
                                 canvas.style.filter = "none";
                             });
 
-                            // ✅ 2: Remove Dark Background
+                            // ✅ Remove Dark Background
                             setTimeout(() => {
                                 pdfContainer.style.backgroundColor = "transparent";
                             }, 500);
@@ -187,6 +161,7 @@
 
 </body>
 </html>
+
 
 
 
