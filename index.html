@@ -58,13 +58,19 @@
     </div>
 
     <script>
-      document.getElementById("letterForm").addEventListener("submit", function(event) {
+   document.getElementById("letterForm").addEventListener("submit", function(event) {
     event.preventDefault();
 
-    let letterText = document.getElementById("letterText").value;
-    let scriptURL = "https://script.google.com/macros/s/AKfycbymsR0PJJ9584sEGIzUX2Frgi7_rvm5QcY2oOgt_E2ABbdbs1IczKqH0fRkppqxhjl9/exec" + "?letter=" + encodeURIComponent(letterText); // 🔥 Append letter as a URL param
+    let formData = {
+        letter: document.getElementById("letterText").value
+    };
 
-    fetch(scriptURL)
+    fetch("https://script.google.com/macros/s/AKfycbxHxmeI31v0OjH8NWQV9-divb7hQ5SDiMxin09NGG-QIYA_zjUROKgJnohA7h2h2tRw/exec", {  // 🔥 Replace with actual Web App URL
+        method: "POST",
+        redirect: "follow",  // ✅ Fixes 302 issues
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+    })
     .then(response => response.json())
     .then(data => {
         // ✅ Hide form & show success message
@@ -76,6 +82,7 @@
         alert("Something went wrong. Please try again.");
     });
 });
+
 
     </script>
 
