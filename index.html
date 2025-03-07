@@ -78,7 +78,7 @@
             let lastName = document.getElementById("lastName").value;
             let letterText = document.getElementById("letterText").value;
 
-            fetch(`YOUR_NEW_GOOGLE_SCRIPT_URL?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}&letter=${encodeURIComponent(letterText)}`)
+            fetch(`https://script.google.com/macros/s/AKfycbxSfxFl6KJlTDr15sR5hRhZTwyk2oQi_HB-2J9_EFWtR-LClW4J6Nj9Ej2kqsWDE5VD/exec?firstName=${encodeURIComponent(firstName)}&lastName=${encodeURIComponent(lastName)}&letter=${encodeURIComponent(letterText)}`)
             .then(response => response.text()) 
             .then(data => {
                 console.log("Response:", data);
