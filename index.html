@@ -12,8 +12,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 50vw;  /* ✅ Smaller PDF */
-            height: 60vh; /* ✅ Maintain height */
+            width: 70vw;  /* ✅ 70% Width */
+            height: 100vh; /* ✅ 100% Height */
             background-color: rgba(0, 0, 0, 0.6);
             display: flex;
             flex-direction: column;
@@ -24,7 +24,7 @@
             padding: 10px; /* ✅ Padding for better view */
         }
 
-        /* ✅ PDF Canvas (Smaller & Scrollable) */
+        /* ✅ PDF Canvas (70% Width & Full Height) */
         .pdf-container canvas {
             width: 100%;
             height: auto;
@@ -83,7 +83,7 @@
 </head>
 <body>
 
-    <!-- ✅ Scrollable, Smaller PDF (Initially Blurred) -->
+    <!-- ✅ Scrollable, 70% Width & 100% Height PDF (Initially Blurred) -->
     <div class="pdf-container" id="pdfContainer">
         <canvas id="pdfViewer"></canvas>
     </div>
@@ -189,6 +189,7 @@
 
 </body>
 </html>
+
 
 
 
