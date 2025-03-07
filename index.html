@@ -47,40 +47,33 @@
     </div>
 
     <!-- ✅ JavaScript for Form Submission -->
-   <script>
+  <script>
 document.addEventListener("DOMContentLoaded", function() {
     document.querySelector(".form-box").addEventListener("submit", function(event) {
         event.preventDefault();  
 
-        let formData = new FormData();
-        formData.append("firstName", document.getElementById("ijowk").value);
-        formData.append("lastName", document.getElementById("indfi").value);
-        formData.append("email", document.getElementById("ipmgh").value);
-        formData.append("phoneNumber", document.getElementById("imgis").value);
-        formData.append("message", document.getElementById("i5vyy").value);
+        let formData = {
+            firstName: document.getElementById("ijowk").value,
+            lastName: document.getElementById("indfi").value,
+            email: document.getElementById("ipmgh").value,
+            phoneNumber: document.getElementById("imgis").value,
+            message: document.getElementById("i5vyy").value
+        };
 
-      fetch("https://api.airtable.com/v0/appzMWQI3M8tdrWh1/Contacts", {
-    method: "POST",
-    headers: {
-        "Authorization": "patvS7KoQn6aOumDP.4c9d232f31c2ff5ecbad6953a22c6fadd47f33049d9b8a9aa25ef8541c70a033",
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-        records: [{
-            fields: {
-                "First Name": "John",
-                "Last Name": "Doe",
-                "Email": "johndoe@example.com",
-                "Phone Number": "1234567890",
-                "Message": "Hello from my website!"
-            }
-        }]
-    })
-})
-.then(response => response.json())
-.then(data => console.log("Success:", data))
-.catch(error => console.error("Error:", error));
-
+        fetch("AKfycbwWujkjF34o4RhGNZZNXhGnZJjeLDKYd6ACRBF_h10sC_pm8KwhcSTO2YEGDAQJ6FvT", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert("Form Submitted Successfully!");
+            document.querySelector(".form-box").reset();
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Something went wrong. Please try again.");
+        });
     });
 });
 </script>
