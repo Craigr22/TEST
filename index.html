@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submit a Letter</title>
     <style>
+        /* ✅ Centering everything */
         body {
             display: flex;
             justify-content: center;
@@ -13,6 +14,8 @@
             font-family: Arial, sans-serif;
             background-color: #f3f3f3;
         }
+
+        /* ✅ Form container */
         .form-box {
             background-color: white;
             padding: 20px;
@@ -21,6 +24,8 @@
             width: 400px;
             text-align: center;
         }
+
+        /* ✅ Textarea for letter */
         textarea {
             width: 100%;
             height: 150px;
@@ -31,6 +36,8 @@
             margin-top: 4px;
             resize: none;
         }
+
+        /* ✅ Submit button */
         .submit-btn {
             width: 100%;
             padding: 10px;
@@ -42,14 +49,29 @@
             font-size: 16px;
             margin-top: 10px;
         }
+
         .submit-btn:hover {
             background-color: #0056b3;
+        }
+
+        /* ✅ Hidden success message */
+        .success-message {
+            display: none;
+            font-size: 16px;
+            color: green;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* ✅ Hide form after submission */
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
 <body>
 
-    <div class="form-box">
+    <div class="form-box" id="formContainer">
         <h2>Submit a Letter</h2>
         <form id="letterForm">
             <textarea id="letterText" placeholder="Write your letter here..." required></textarea>
@@ -57,36 +79,36 @@
         </form>
     </div>
 
+    <!-- ✅ Success message -->
+    <p class="success-message" id="successMessage">🎉 Your letter has been submitted successfully!</p>
+
     <script>
-  document.getElementById("letterForm").addEventListener("submit", function(event) {
-    event.preventDefault();
+        document.getElementById("letterForm").addEventListener("submit", function(event) {
+            event.preventDefault();
 
-    let letterText = document.getElementById("letterText").value;
+            let letterText = document.getElementById("letterText").value;
 
-    fetch(`https://script.google.com/macros/s/AKfycbyRrBWCPfw8k0pzdsHedov1QAzIbPgDZIdVHAlEXWg-c6WfA1mVNKfdK0TYScG2_Tjv/exec?letter=${encodeURIComponent(letterText)}`, { // 🔥 Send data via GET query string
-        method: "GET",
-        redirect: "follow",  // ✅ Fix 302 issues
-        headers: { "Content-Type": "application/json" }
-    })
-    .then(response => response.json())  // ✅ Ensure JSON response
-    .then(data => {
-        if (data.status === "success") {
-            // ✅ Hide form & show success message
-            document.getElementById("formContainer").classList.add("hidden");
-            document.getElementById("successMessage").style.display = "block";
-        } else {
-            throw new Error("Unexpected response: " + JSON.stringify(data));
-        }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        alert("Something went wrong: " + error.message);
-    });
-});
-
-
+            fetch(`YOUR_GOOGLE_SCRIPT_URL?letter=${encodeURIComponent(letterText)}`, { 
+                method: "GET",
+                headers: { "Content-Type": "application/json" }
+            })
+            .then(response => response.json())  
+            .then(data => {
+                if (data.status === "success") {
+                    document.getElementById("formContainer").classList.add("hidden");
+                    document.getElementById("successMessage").style.display = "block";
+                } else {
+                    throw new Error("Unexpected response: " + JSON.stringify(data));
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Something went wrong: " + error.message);
+            });
+        });
     </script>
 
 </body>
 </html>
+
 
