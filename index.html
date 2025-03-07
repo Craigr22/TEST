@@ -101,7 +101,7 @@
 
     let letterText = document.getElementById("letterText").value;
 
-    fetch(`YOUR_GOOGLE_SCRIPT_URL?letter=${encodeURIComponent(letterText)}`, { 
+    fetch(`https://script.google.com/macros/s/AKfycbyZGd1-83ebvCSH9d_1AyEbMPrCBPpNMqD3MgRgCtR-qDYqECWYRm8IUFhuyftA8PZe/exec?letter=${encodeURIComponent(letterText)}`, { 
         method: "GET",
         mode: "cors",  // ✅ Fixes CORS issues
         headers: { "Content-Type": "application/json" }
