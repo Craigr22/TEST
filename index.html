@@ -59,10 +59,10 @@ document.addEventListener("DOMContentLoaded", function() {
         formData.append("phoneNumber", document.getElementById("imgis").value);
         formData.append("message", document.getElementById("i5vyy").value);
 
-      fetch("https://api.airtable.com/v0/YOUR_BASE_ID/YOUR_TABLE_NAME", {
+      fetch("https://api.airtable.com/v0/appN0NgEKKwb5ZbJi/TEST", {
     method: "POST",
     headers: {
-        "Authorization": "Bearer YOUR_PERSONAL_ACCESS_TOKEN",
+        "Authorization": "pat6vfmvmZJjCzDzq.135457da99b732e5098ef5bfede6aabb2f9e31bd142aec9603e0b56b11bcb2dc",
         "Content-Type": "application/json"
     },
     body: JSON.stringify({
